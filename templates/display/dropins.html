@@ -1,0 +1,34 @@
+<div class="dropins">
+    <h3 class="boiseStateEventHeader">Today's Drop-Ins</h3>
+    <div ng-show="noEventsToday">
+        No events today, check back tomorrow!
+    </div>
+    <div class="eventsListHeader" ng-hide="noEventsToday">
+        <div class="theEventName firstCol">Event</div>
+        <div class="theLocation">Location</div>
+        <div class="theTime">Time</div>
+    </div>
+
+    <div class="bsuEventsRows">
+        <div class="eventRow" ng-repeat="event in events.list | filter: filterDropins | unique:'id' | orderBy: 'event.start':false">
+            <div class="theEventName firstCol">
+                <a ng-href="{{ event.url }}">
+                    <!--Allow for html chars-->
+                    <span ng-bind-html="event.title | trusted"></span>
+                </a>
+                &nbsp;
+            </div>
+            <div class="theLocation">
+                {{ event.location }}
+                &nbsp;
+            </div>
+            <div class="theTime">
+                {{ event.start | time }}
+                <span class="bsuEventsRecurringText" ng-show="event.recurrence.reoccurs">
+                    ({{ event.recurrence.days | recurrenceDays }})
+                </span>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+</div>

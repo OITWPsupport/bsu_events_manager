@@ -1,0 +1,36 @@
+<div id="eventsFrontPage">
+
+    <div class="bsu_events_front_page bsuEventsTableHeader">
+        <div class="eventCol">Event</div>
+        <div class="locationCol">Date</div>
+        <div class="timeCol">Time</div>
+    </div>
+
+    <div class="bsuEventsAppTableDiv">
+
+        <table id="bsuEvents" class="bsu_events_front_page bsuEventsTable">
+            <tbody>
+                <tr
+                    ng-repeat="event in events.list | orderBy: 'start'"
+                    class="bsuEventsEventListing" ng-hide="event.allDay">
+                    <td class="eventCol">
+                        <a ng-href="{{ event.url }}">
+                            <span ng-bind-html="event.title | trusted"></span>
+                        </a>
+                    </td>
+                    <td class="locationCol">
+                        {{ event.start | date }}
+                    </td>
+                    <td class="timeCol">
+                        {{ event | timeRange }}
+                        <span class="bsuEventsRecurringText" ng-show="event.recurrence.reoccurs">
+                            {{ event.recurrence.days | recurrenceDays }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>

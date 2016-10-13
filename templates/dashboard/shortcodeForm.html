@@ -1,0 +1,40 @@
+<div class="row" ng-hide="loading">
+    <div class="col-md-2">
+        <label>Select View Type:</label>
+        <select
+            ng-model="viewType"
+            class="form-control"
+            ng-options="type.value as type.name for type in viewTypes"
+            ng-change="createShortcode()"></select>
+
+    </div>
+    <div class="col-md-2"
+         ng-hide="['details', 'deadlines', 'trips', 'clinics', 'fields'].indexOf(viewType) > -1">
+        <label>Categories:</label>
+        <div class="row">
+            <div class="col-md-12">
+                <select
+                    class="form-control"
+                    ng-model="selectedCategories"
+                    ng-options="category.name as category.name for category in categories"
+                    ng-change="createShortcode()"
+                    multiple="multiple"
+                    ></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<div class="row">
+    <div class="col-md-4">
+        <label>Shortcode:</label>
+
+        <div class="row">
+            <div class="col-md-12">
+                <input type="text" class="form-control" ng-model="shortcode" select-on-click/>
+            </div>
+        </div>
+    </div>
+</div>

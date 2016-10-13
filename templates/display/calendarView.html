@@ -1,0 +1,12 @@
+<div class="pull-right">
+    <div ng-repeat="eventType in eventTypes">
+        <div style="background-color:{{ eventType.color }}; width: 50px;height: 1em;display: inline-block;position: relative;top:4px;"></div>
+        {{ eventType.title }}
+    </div>
+</div>
+<select
+        ng-model="eventTitle"
+        ng-options="title for title in eventTitles"
+        class="pull-right"></select>
+<br />
+<div id="eventCal"></div>

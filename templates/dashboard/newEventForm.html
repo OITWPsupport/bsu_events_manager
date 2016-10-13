@@ -1,0 +1,254 @@
+<form id="newEventForm"
+      name="newEventForm"
+      form-handler
+      form-handler-callback="addEvent()"
+      ng-hide="loading" novalidate>
+
+    <label>Calendar</label>
+
+    <div class="row">
+        <select ng-model="event.type" ng-options="type for type in calendarTypes" required></select>
+    </div>
+
+    <div ng-if="event.type == 'Trips' || event.type == 'Clinics'">
+        <div>
+            <label>Trip Includes</label>
+            <textarea ng-model="event.tripIncludes" cols="30" rows="5"></textarea>
+        </div>
+        <div>
+            <label>Packing List</label>
+            <input type="text" ng-model="event.packingList">
+        </div>
+    </div>
+
+    <div ng-show="event.type == 'Fields'">
+        <label>Field Type</label>
+        <div class="row">
+            <select ng-model="event.fieldType" ng-options="fieldType for fieldType in fieldTypes"
+                    ng-required="event.type == 'Fields'"></select>
+        </div>
+    </div>
+
+    <label>Event Name</label>
+
+    <div class="row">
+        <input type="text" class="form-control" ng-model="event.name" required/>
+    </div>
+
+    <h3>Duration</h3>
+    <div class="row" ng-show="['Trips', 'Clinics'].indexOf(event.type) > -1">
+        <label for="dateDescription">Date Description</label>
+        <textarea id="dateDescription" type="text" rows="4"
+                ng-model="event.dateDescription"></textarea>
+    </div>
+    <div class="row">
+        <div class="half">
+            <label>Start</label>
+            <input type="text"
+                   title="From date"
+                   placeholder="From date"
+                   class="form-control date"
+                   ng-model="event.startDate"
+                   bs-datepicker
+                   data-date-type="string"
+                   data-model-date-format="MM/dd/yyyy"
+                   data-autoclose="true"
+                   required />
+            <times time="event.startTime"></times>
+        </div>
+        <div class="half" ng-hide="event.allDay">
+            <label>End</label>
+            <input type="text"
+                   bs-datepicker
+                   data-date-type="string"
+                   data-model-date-format="MM/dd/yyyy"
+                   data-autoclose="true"
+                   title="Until date"
+                   placeholder="Until date"
+                   class="form-control date"
+                   ng-model="event.endDate"
+                   required />
+            <times time="event.endTime"></times>
+        </div>
+    </div>
+
+    <div class="row">
+        <input type="checkbox" value="true" ng-model="event.allDay"/> All Day
+    </div>
+    <div class="row">
+        <input type="checkbox" value="true" ng-model="event.repeat.repeating"/> Repeat &hellip;
+    </div>
+
+    <div ng-show="event.repeat.repeating" class="row secondary">
+        <div class="row">
+            <label>Repeats:</label>
+            <select
+                    class="form-control"
+                    ng-model="event.repeat.repeats">
+                <option value="WEEKLY">Weekly</option>
+                <option value="MONTHLY">Monthly</option>
+            </select>
+        </div>
+
+        <div class="row" ng-show="event.repeat.repeats == 'WEEKLY'">
+            <label>Repeat every # of weeks:</label>
+            <input
+                class="form-control"
+                type="number"
+                ng-model="event.repeat.repeatEvery"/>
+        </div>
+
+        <div class="row" ng-show="event.repeat.repeats == 'WEEKLY'">
+            <label>Repeat on:</label>
+            Su <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'SU')" />
+            Mo <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'MO')" />
+            Tu <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'TU')" />
+            We <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'WE')" />
+            Th <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'TH')" />
+            Fr <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'FR')" />
+            Sa <input type="checkbox" ng-click="toggle('event.repeat.repeatOn', 'SA')" />
+        </div>
+
+        <div class="row" ng-show="event.repeat.repeats == 'MONTHLY'">
+            <label>Repeat every # of months:</label>
+            <div class="col-sm-4">
+                <input
+                        class="form-control"
+                        type="number"
+                        ng-model="event.repeat.repeatEvery"/>
+            </div>
+        </div>
+
+        <div class="row" ng-show="event.repeat.repeats == 'MONTHLY'">
+            <div class="col-sm-2">
+                Repeat by
+            </div>
+            <div class="col-sm-4">
+                <select ng-model="event.repeat.repeatBy">
+                    <option value="dayOfWeek">Day of Week</option>
+                    <option value="dayOfMonth">Day of Month</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <label>Ends:</label>
+            <div class="row">
+                <input type="radio" ng-model="event.repeat.ends.type" value="never"/>
+                Never
+            </div>
+            <div class="row">
+                <input type="radio" ng-model="event.repeat.ends.type" value="after"/> After
+                <input type="number"
+                       class="inlineInput"
+                       ng-model="event.repeat.ends.after"/> occurrences
+            </div>
+            <div class="row">
+                <input type="radio" ng-model="event.repeat.ends.type" value="on"/> On
+                <input type="text"
+                       bs-datepicker
+                       data-date-type="string"
+                       data-model-date-format="MM/dd/yyyy"
+                       data-autoclose="true"
+                       class="inlineInput"
+                       ng-model="event.repeat.ends.on"/>
+            </div>
+        </div>
+    </div>
+
+    <h3>Location</h3>
+
+    <label>Choose location:</label>
+    <div class="row">
+        <select ng-model="event.location"
+                ng-options="location.name as location.name for location in locations"
+                ng-required="event.type != 'Fields'"></select>
+    </div>
+
+    <div class="row" ng-if="event.location == 'Other'">
+        <label>Other Location</label>
+        <textarea ng-model="event.otherLocationDescription" cols="30" rows="10"></textarea>
+    </div>
+
+    <h3>Description</h3>
+    <label>Write a description:</label>
+    <div class="row">
+        <textarea
+                class="form-control"
+                ng-model="event.description" rows="10" required></textarea>
+    </div>
+
+    <h3>Event Details</h3>
+    <div class="row">
+        <label>Categories:</label>
+        <div class="checkbox" ng-repeat="category in categories | filterCategories: event.type">
+            <input type="checkbox" ng-click="toggle('event.categories', category.name)"/> {{
+            category.name}}
+        </div>
+        <div class="checkbox" ng-repeat="category in staticCategories">
+            <input type="checkbox" ng-click="toggle('event.categories', category)"/> {{ category }}
+        </div>
+    </div>
+
+    <div class="row">
+        <label>Details page URL:</label>
+        <input type="text"
+               class="form-control"
+               ng-model="event.detailsUrl"/>
+    </div>
+
+    <div class="row" ng-if="icons !== undefined && icons.length > 0">
+        <label>Unique Icon</label>
+        <button type="button"
+                class="btn btn-default btn-sm"
+                ng-click="showIcons()">Add Unique Icon</button>
+        <span ng-show="selectedIconName">
+            {{ selectedIconName }}
+        </span>
+    </div>
+
+
+    <div class="row">
+        <label>Fee:</label>
+        <input type="text"
+               class="form-control"
+               ng-model="event.fee"/>
+    </div>
+
+    <label>Is registration required?</label>
+    <div class="row">
+        <input type="radio" name="registrationRequired"
+               ng-click="registrationRequired(true)"/> Yes <br/>
+        <input type="radio" name="registrationRequired"
+               ng-click="registrationRequired(false)"/> No
+    </div>
+
+    <div class="row secondary" ng-show="event.registration.required">
+        <div class="row">
+            <label>Registration deadline:</label>
+            <input type="text"
+                   bs-datepicker
+                   data-date-type="string"
+                   data-model-date-format="MM/dd/yyyy"
+                   data-autoclose="true"
+                   class="form-control"
+                   ng-model="event.registration.deadline"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <label>RecTrac Activity Number:</label>
+        <input type="text"
+               class="form-control"
+               ng-model="event.recTracId"/>
+    </div>
+
+    <div class="row">
+        <div id="alerts-container"></div>
+    </div>
+
+    <loading ng-show="addingEvent"></loading>
+    <button
+            class="btn btn-primary"
+            ng-disabled="addingEvent">Create Event</button>
+</form>

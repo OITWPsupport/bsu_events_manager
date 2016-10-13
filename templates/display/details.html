@@ -1,0 +1,110 @@
+<div ng-if="event">
+
+    <div class="bsuEventDetailHeader">
+        <h1>{{ event.title }}</h1>
+        <span class="calendarButtons">
+            <a ng-show="event.registration.url" ng-href="{{ event.registration.url }}">
+                <div class="registerButton"><h4>Register</h4></div>
+            </a>
+        </span>
+    </div>
+
+    <div class="bsuEventDetailMain">
+        <div class="bsuEventDetailImage">
+            <div class="bsuEventDetailIcon" ng-class="event.categories | arrayToIconClasses" ng-if="!event.iconUrl"></div>
+            <div class="uniqueIcon" ng-if="event.iconUrl">
+                <img ng-src="{{event.iconUrl}}" alt="Event Icon"/>
+            </div>
+        </div>
+        <div class="bsuEventDetails">
+            <ul class="list-unstyled-block">
+                <span ng-if="event.categories.indexOf('Trips') === -1 && event.categories.indexOf('Outdoors') === -1">
+                    <li ng-if="event.dateDescription">
+                        <div class="bsuEventDetailTitle">Date:</div>
+                        <div class="eventDescription">
+                            <span ng-bind-html="event.dateDescription | trusted"></span>
+                        </div>
+                    </li>
+                    <li ng-if="!event.dateDescription && event.registrationStart">
+                        <div class="bsuEventDetailTitle">Date:</div>{{ event.registrationStart | fullDate }}
+                    </li>
+                    <li ng-if="!event.dateDescription && !event.registrationStart">
+                        <div class="bsuEventDetailTitle">Date:</div>{{ event.start | fullDate }}
+                    </li>
+                    <li>
+                        <div class="bsuEventDetailTitle">Weekday(s):</div> {{ recurrence }}
+                    </li>
+                </span>
+                <li ng-if="event.registrationStartMoment && event.registrationEndMoment && event.categories.indexOf('Trips') === -1 && event.categories.indexOf('Clinics') === -1">
+                    <div class="bsuEventDetailTitle">Time:</div>{{ event.registrationStartMoment | momentTime }} - {{ event.registrationEndMoment | momentTime }}
+                </li>
+                <li ng-if="(!event.registrationStartMoment || !event.registrationEndMoment) && event.start && event.categories.indexOf('Trips') === -1 && event.categories.indexOf('Clinics') === -1">
+                    <div class="bsuEventDetailTitle">Time:</div>{{ event.start | time }} - {{ event.end | time }}
+                </li>
+                <span ng-if="event.categories.indexOf('Trips') > -1 || event.categories.indexOf('Clinics') > -1">
+                    <li>
+                        <div class="bsuEventDetailTitle">Date Range:</div>
+                        <span ng-if="event.startMoment.format('M/D') == event.endMoment.format('M/D')">
+                            {{ event.startMoment.format('M/D') }}
+                        </span>
+                        <span ng-if="event.startMoment.format('M/D') != event.endMoment.format('M/D')">
+                            {{ event.startMoment.format('M/D') }} - {{ event.endMoment.format('M/D') }}
+                        </span>
+                    </li>
+                    <li ng-if="event.tripIncludes">
+                        <div class="bsuEventDetailTitle">Trip Includes:</div> {{ event.tripIncludes }}
+                    </li>
+                    <li ng-if="event.packingList">
+                        <div class="bsuEventDetailTitle">Packing List:</div>
+                        <a ng-href="{{ event.packingList }}">View Packing List</a>
+                    </li>
+                </span>
+                <span ng-if="event.categories.indexOf('Trips') === -1 && event.categories.indexOf('Clinics') === -1">
+                    <li ng-show="event.duration">
+                        <div class="bsuEventDetailTitle">Duration:</div>{{ event.duration | minutesToTimeString }}
+                    </li>
+                </span>
+                <li ng-show="event.location">
+                    <div class="bsuEventDetailTitle">Location:</div>
+                    <div class="bsuEventDetailLocation" ng-if="event.location != 'Other' && !event.otherLocationDescription">
+                        <div ng-bind-html="event.location | trusted"></div>
+                    </div>
+                    <div class="bsuEventDetailLocation" ng-if="event.location == 'Other' && event.otherLocationDescription">
+                        <span ng-if="event.otherLocationDescription.indexOf('http') > -1">
+                            <a ng-href="{{ event.otherLocationDescription }}">Map</a>
+                        </span>
+                        <span ng-if="event.otherLocationDescription.indexOf('http') === -1">
+                            {{event.otherLocationDescription}}
+                        </span>
+                    </div>
+                </li>
+                <li ng-show="event.registration.deadline">
+                    <div class="bsuEventDetailTitle">Register By:</div>{{ event.registration.deadline | fullDate }}
+                </li>
+                <li ng-show="sessionEndsOn">
+                    <div class="bsuEventDetailTitle">Session Ends:</div> {{ sessionEndsOn }}
+                </li>
+                <li>
+                    <div class="bsuEventDetailTitle" ng-show="event.fee">Fee:</div>
+                    {{ event.fee | fee }}
+                </li>
+                <li>
+                    <a ng-href="{{ event.googleCalUrl }}" ng-show="event.googleCalUrl" target="_blank" rel="nofollow">+ Google Calendar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bsuEventDetailPost" ng-show="event.description">
+        <h3>Class Description</h3>
+        <p>
+            <span ng-bind-html="event.description | trusted"></span>
+        </p>
+    </div>
+    <div ng-if="event.categories.indexOf('Trips') > -1 || event.categories.indexOf('Outdoors') > -1">
+        <trip-notes></trip-notes>
+    </div>
+</div>
+<div ng-show="noEventFound">
+    <h1>No event found</h1>
+</div>

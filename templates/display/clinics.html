@@ -1,0 +1,36 @@
+<div class="bsuTrips">
+    <div class="boiseStateEventHeader">
+        <h3>Outdoor Clinics</h3>
+    </div>
+    <div class="tripsList">
+        <div class="header">
+            <div class="name">Clinic Name</div>
+            <div class="dates">Dates</div>
+            <div class="cost">Cost</div>
+            <div class="deadline">Register By</div>
+        </div>
+        <div class="body">
+            <div ng-repeat="event in events.list" class="row">
+                <div class="name">
+                    <a ng-href="{{ event.url }}">
+                        <!--Allow for html chars-->
+                        <span ng-bind-html="event.title | trusted"></span>
+                    </a>
+                </div>
+                <div class="dates">
+                    <span ng-if="event.dateDescription" ng-bind-html="event.dateDescription | trusted"></span>
+                    <span ng-if="!event.dateDescription">
+                        <span ng-if="event.startMoment.format('M/D') == event.endMoment.format('M/D')">
+                            {{ event.startMoment.format('M/D') }}
+                        </span>
+                        <span ng-if="event.startMoment.format('M/D') != event.endMoment.format('M/D')">
+                            {{ event.startMoment.format('M/D') }} - {{ event.endMoment.format('M/D') }}
+                        </span>
+                    </span>
+                </div>
+                <div class="cost">{{ event.fee }}</div>
+                <div class="deadline">{{ event.registration.deadline }}</div>
+            </div>
+        </div>
+    </div>
+</div>

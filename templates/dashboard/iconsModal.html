@@ -1,0 +1,25 @@
+<div class="modal-body">
+    <div class="iconRow">
+        <div class="iconSelect">
+            <input type="radio" name="iconUrl" ng-model="event.iconUrl" ng-change="selectIcon(null)"
+                   ng-checked="!event.iconUrl"/>
+        </div>
+        <div class="iconTitle">None</div>
+    </div>
+    <br/><br/>
+    <div class="iconRow" ng-repeat="icon in icons">
+        <div class="iconSelect">
+            <input type="radio" name="event.iconUrl" ng-model="iconUrl" ng-change="selectIcon(icon)" ng-checked="event.iconUrl == icon.url"/>
+        </div>
+        <div class="iconPreview">
+            <img ng-src="{{ icon.url }}" alt="Icon Preview"/>
+        </div>
+        <div class="iconTitle">
+            {{ icon.name }}
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+</div>

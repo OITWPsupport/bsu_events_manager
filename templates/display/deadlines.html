@@ -1,0 +1,29 @@
+<div class="deadlines">
+    <h3 class="boiseStateEventHeader">Important Dates</h3>
+    <div ng-show="noEventsToday">
+        No dates
+    </div>
+    <div class="eventsListHeader" ng-hide="noEventsToday">
+        <div class="theTitle firstCol">Event</div>
+        <div class="theDate">Register By</div>
+    </div>
+
+    <div class="bsuEventsRows">
+        <div class="eventRow" ng-repeat="event in events.list |
+            unique:'id' |
+            orderBy: 'event.start':false |
+            preventDuplicateDeadlines">
+            <div class="theTitle firstCol">
+                <a href="{{event.url}}">
+                    <!--Allow for html chars-->
+                    <span ng-bind-html="event.title | trusted"></span>
+                </a>
+                &nbsp;
+            </div>
+            <div class="theDate">
+                {{ event.start | date }}
+                &nbsp;
+            </div>
+        </div>
+    </div>
+</div>

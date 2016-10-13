@@ -1,0 +1,26 @@
+<div class="tab-wrap">
+    <ul class="tabs grey">
+        <li class="active">
+            <span ng-click="changeView('calendar')">
+                <a ng-href="#" ng-class="{'active': selectedView == 'calendar'}">Calendar View</a>
+            </span>
+        </li>
+        <li>
+            <span ng-click="changeView('list')">
+                <a ng-href="#" ng-class="{'active': selectedView == 'list'}">List View</a>
+            </span>
+        </li>
+    </ul>
+    <ul class="tabs-content">
+        <li ng-class="{'active': selectedView == 'calendar'}">
+            <span>
+                <calendar-view></calendar-view>
+            </span>
+        </li>
+        <li ng-class="{'active': selectedView == 'list'}">
+            <span>
+                <list-view></list-view>
+            </span>
+        </li>
+    </ul>
+</div>
